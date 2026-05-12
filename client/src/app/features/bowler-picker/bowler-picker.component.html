@@ -1,0 +1,19 @@
+<div class="picker">
+  <h3>Pick the bowler</h3>
+  <div class="grid">
+    @for (b of bowlers(); track b.id) {
+      <button
+        class="bowler"
+        [class.selected]="selected() === b.id"
+        [class.captain-pick]="captainBowlerId() === b.id"
+        [disabled]="!editable() || b.overs_remaining <= 0"
+        (click)="pick(b)">
+        <div class="name">{{ b.name }}</div>
+        <div class="meta">
+          <span class="type">{{ b.type.replace('_', ' ') }}</span>
+          <span class="overs">{{ b.overs_used }}/{{ b.overs_used + b.overs_remaining }} overs</span>
+        </div>
+      </button>
+    }
+  </div>
+</div>

@@ -1,0 +1,116 @@
+@if (realtime.currentBall(); as ball) {
+  <div class="panel">
+    <div class="field-wrap">
+      <app-field
+        [(fielders)]="fielders"
+        [editable]="editable()"
+        [captainFielders]="captainFielders()"
+      />
+    </div>
+
+    <div class="controls">
+      @if (legality(); as l) {
+        <div class="legality" [class.illegal]="!l.legal">
+          @if (l.legal) {
+            <span class="lg-icon">✓</span>
+            <span>Legal field — {{ l.outsideCount }}/{{ l.maxAllowed }} outside the ring ({{ l.phase }})</span>
+          } @else {
+            <span class="lg-icon">⚠</span>
+            <span><strong>Illegal</strong> — {{ l.outsideCount }} outside (max {{ l.maxAllowed }} in {{ l.phase }}). Locking in halves your tactical merit.</span>
+          }
+        </div>
+      }
+
+      <app-bowler-picker
+        [bowlers]="ball.bowler_options"
+        [(selected)]="selectedBowlerId"
+        [editable]="editable()"
+        [captainBowlerId]="captainBowlerId()"
+      />
+
+      <div class="actions">
+        @switch (realtime.phase()) {
+          @case ('SETTLING') {
+            <div class="hint">Field opens shortly — adjust now.</div>
+          }
+          @case ('WINDOW_OPEN') {
+            <button
+              class="lock-in"
+              [disabled]="!selectedBowlerId() || submitting() || submittedBallId() === ball.ball_id"
+              (click)="lockIn()">
+              @if (submittedBallId() === ball.ball_id) {
+                Locked in ✓
+              } @else if (submitting()) {
+                Submitting…
+              } @else {
+                Lock In
+              }
+            </button>
+          }
+          @case ('LOCKED') {
+            <div class="hint locked">Window closed — delivery imminent…</div>
+          }
+          @case ('REVEAL') {
+            @if (realtime.latestOutcome(); as outcome) {
+              <div class="reveal">
+                <div class="row big">
+                  {{ outcome.result.runs }} run(s)
+                  @if (outcome.result.wicket) {
+                    — <strong class="wicket">WICKET ({{ outcome.result.wicket.type }})</strong>
+                  }
+                </div>
+                <div class="total-score">
+                  Your score: <strong>{{ outcome.user_score.total }}</strong> / 100
+                </div>
+                <div class="breakdown">
+                  <div class="row-score">
+                    <div class="row-head">
+                      <span class="label">Captain similarity</span>
+                      <span class="value">{{ outcome.user_score.components.captain_similarity.weighted | number: '1.0-0' }} / 30</span>
+                    </div>
+                    <div class="row-bar">
+                      <div class="row-fill" [style.width.%]="outcome.user_score.components.captain_similarity.raw * 100"></div>
+                    </div>
+                    <div class="row-exp">{{ outcome.user_score.explanation.captain }}</div>
+                  </div>
+                  <div class="row-score">
+                    <div class="row-head">
+                      <span class="label">Tactical merit</span>
+                      <span class="value">{{ outcome.user_score.components.tactical_merit.weighted | number: '1.0-0' }} / 50</span>
+                    </div>
+                    <div class="row-bar">
+                      <div class="row-fill" [style.width.%]="outcome.user_score.components.tactical_merit.raw * 100"></div>
+                    </div>
+                    <div class="row-exp">{{ outcome.user_score.explanation.merit }}</div>
+                  </div>
+                  <div class="row-score">
+                    <div class="row-head">
+                      <span class="label">Outcome bonus</span>
+                      <span class="value">{{ outcome.user_score.components.outcome_bonus.weighted | number: '1.0-0' }} / 20</span>
+                    </div>
+                    <div class="row-bar">
+                      <div class="row-fill" [style.width.%]="outcome.user_score.components.outcome_bonus.raw * 100"></div>
+                    </div>
+                    <div class="row-exp">{{ outcome.user_score.explanation.outcome }}</div>
+                  </div>
+                </div>
+                <div class="legend">
+                  <span class="legend-item"><span class="dot yours"></span>your field</span>
+                  <span class="legend-item"><span class="dot captain"></span>captain's field</span>
+                </div>
+              </div>
+            }
+          }
+        }
+
+        @if (lastAck(); as ack) {
+          @if (!ack.ok) {
+            <div class="ack-error">Submission rejected: {{ ack.reason }}</div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="empty">Waiting for the first ball. Hit <em>Start Over</em>.</div>
+}

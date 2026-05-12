@@ -1,0 +1,51 @@
+<svg #svgEl
+     viewBox="-1.1 -1.1 2.2 2.2"
+     class="field"
+     [class.locked]="!editable()"
+     (pointermove)="onPointerMove($event)"
+     (pointerup)="onPointerUp($event)"
+     (pointerleave)="onPointerUp($event)"
+     (pointercancel)="onPointerUp($event)">
+
+  <!-- Background: boundary + 30-yard ring (legality uses r=0.60 per shared/legality.ts) -->
+  <circle cx="0" cy="0" r="1" class="boundary" />
+  <circle cx="0" cy="0" r="0.60" class="inner-ring" />
+
+  <!-- Pitch (note SVG +y is down; data +y is up, so visual top = bowler end) -->
+  <rect x="-0.03" y="-0.08" width="0.06" height="0.16" class="pitch" />
+  <!-- Stumps: one at each end -->
+  <line x1="-0.03" y1="-0.08" x2="0.03" y2="-0.08" class="stumps" />
+  <line x1="-0.03" y1="0.08"  x2="0.03" y2="0.08"  class="stumps" />
+
+  <!-- Fixed: bowler (top) and keeper (bottom) -->
+  <g class="fixed bowler">
+    <circle cx="0" cy="-0.13" r="0.035" />
+    <text x="0" y="-0.22" text-anchor="middle">bowler</text>
+  </g>
+  <g class="fixed keeper">
+    <circle cx="0" cy="0.13" r="0.035" />
+    <text x="0" y="0.20" text-anchor="middle">keeper</text>
+  </g>
+
+  <!-- Captain ghost (REVEAL only): semi-transparent reference fielders -->
+  @if (captainFielders(); as cf) {
+    @for (f of cf; track f.slot_id) {
+      <g class="captain-ghost" [attr.transform]="'translate(' + f.x + ',' + (-f.y) + ')'">
+        <circle r="0.045" />
+      </g>
+    }
+  }
+
+  <!-- Draggable fielders. Y is flipped at the transform so data +y renders up. -->
+  @for (f of fielders(); track f.slot_id) {
+    <g class="fielder"
+       [class.dragging]="draggingSlot() === f.slot_id"
+       [attr.transform]="'translate(' + f.x + ',' + (-f.y) + ')'"
+       (pointerdown)="onPointerDown($event, f.slot_id)">
+      <circle r="0.04" />
+      @if (f.name) {
+        <text y="0.085" text-anchor="middle">{{ f.name }}</text>
+      }
+    </g>
+  }
+</svg>

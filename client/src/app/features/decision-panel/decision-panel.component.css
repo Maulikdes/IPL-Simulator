@@ -1,0 +1,220 @@
+:host {
+  display: block;
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 520px) 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.field-wrap {
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  padding: 8px;
+  background: #fafafa;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.legality {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #e8f5e8;
+  color: #2a5c2a;
+  border: 1px solid #b8d8b8;
+}
+
+.legality.illegal {
+  background: #ffe5e5;
+  color: #883333;
+  border-color: #f5b8b8;
+}
+
+.legality .lg-icon {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lock-in {
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #c33;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.lock-in:hover:not(:disabled) {
+  background: #a22;
+}
+
+.lock-in:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-size: 13px;
+  color: #666;
+  padding: 10px 12px;
+  background: #fff8e1;
+  border-radius: 6px;
+}
+
+.hint.locked {
+  background: #ffe5e5;
+  color: #993333;
+}
+
+.reveal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  background: #f0f7ff;
+  border-radius: 6px;
+}
+
+.reveal .row.big {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.total-score {
+  font-size: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d0e0f0;
+}
+
+.total-score strong {
+  font-size: 24px;
+  color: #1a1a1a;
+}
+
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row-score {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.row-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 13px;
+}
+
+.row-head .label {
+  color: #444;
+  font-weight: 500;
+}
+
+.row-head .value {
+  font-family: ui-monospace, "SF Mono", monospace;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.row-bar {
+  height: 6px;
+  background: #d8e6f3;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.row-fill {
+  height: 100%;
+  background: #2c7;
+  transition: width 0.5s ease;
+}
+
+.row-exp {
+  font-size: 12px;
+  color: #555;
+  margin-top: 1px;
+}
+
+.wicket {
+  color: #c33;
+  letter-spacing: 0.5px;
+}
+
+.muted {
+  color: #888;
+  font-size: 12px;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-item .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-item .dot.yours {
+  background: #f4d03f;
+}
+
+.legend-item .dot.captain {
+  background: transparent;
+  border: 2px dashed #ff4d4d;
+}
+
+.ack-error {
+  font-size: 13px;
+  color: #c33;
+  padding: 8px;
+  background: #ffe5e5;
+  border-radius: 4px;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+  font-style: italic;
+}
+
+@media (max-width: 900px) {
+  .panel {
+    grid-template-columns: 1fr;
+  }
+}

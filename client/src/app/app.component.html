@@ -1,0 +1,55 @@
+<main class="app">
+  <header class="header">
+    <div class="title-row">
+      <div>
+        <h1>IPL Coaching Simulator</h1>
+        <div class="match-title">Mumbai Indians vs Chennai Super Kings — 2019 IPL Final</div>
+      </div>
+      <div class="right-rail">
+        @if (sessionScore(); as s) {
+          <div class="session-chip" title="Score earned / max possible across all balls played">
+            <div class="session-label">Session</div>
+            <div class="session-total">
+              <span class="num">{{ s.total }}</span>
+              <span class="sep"> / </span>
+              <span class="max">{{ s.balls_played * 100 }}</span>
+            </div>
+            <div class="session-meta">{{ s.balls_played }} ball{{ s.balls_played === 1 ? '' : 's' }} played</div>
+          </div>
+        }
+        <button (click)="startOver()" [disabled]="!realtime.connected()">Start Over</button>
+      </div>
+    </div>
+
+    @if (realtime.currentBall(); as ball) {
+      <div class="scoreline">
+        <span class="over">Over {{ ball.over_number }} · Ball {{ ball.ball_number }} of 6</span>
+        <span class="separator">·</span>
+        <span class="score-line">
+          CSK <strong>{{ ball.match_situation.score }}/{{ ball.match_situation.wickets }}</strong>
+          (target {{ ball.match_situation.target }})
+        </span>
+        @if (chaseTagline(); as t) {
+          <span class="separator">·</span>
+          <span class="tagline">{{ t }}</span>
+        }
+        <span class="batter">{{ ball.batter.name }} ({{ ball.batter.hand === 'right' ? 'RHB' : 'LHB' }}) on strike</span>
+      </div>
+    }
+
+    <div class="status">
+      <span class="dot" [class.connected]="realtime.connected()"></span>
+      <span>{{ realtime.connected() ? 'connected' : 'disconnected' }}</span>
+      <span class="phase">phase: <strong>{{ realtime.phase() }}</strong></span>
+      @if (countdownLabel(); as label) {
+        <span class="countdown" [class.urgent]="realtime.phase() === 'WINDOW_OPEN' && secondsToClose()! <= 5">
+          {{ label }}
+        </span>
+      }
+    </div>
+  </header>
+
+  <app-decision-panel />
+</main>
+
+<router-outlet />

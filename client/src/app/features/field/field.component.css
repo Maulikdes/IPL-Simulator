@@ -1,0 +1,96 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.field {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.boundary {
+  fill: #4a7c3a;
+  stroke: #eee;
+  stroke-width: 0.01;
+}
+
+.inner-ring {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 0.005;
+  stroke-dasharray: 0.02 0.02;
+  opacity: 0.6;
+}
+
+.pitch {
+  fill: #c19a6b;
+  stroke: #8b6f47;
+  stroke-width: 0.003;
+}
+
+.stumps {
+  stroke: #ffffff;
+  stroke-width: 0.005;
+  stroke-linecap: round;
+}
+
+.fixed circle {
+  fill: #888;
+  stroke: #fff;
+  stroke-width: 0.005;
+}
+
+.fixed text {
+  font-size: 0.04px;
+  fill: #ffffff;
+  opacity: 0.8;
+  font-family: system-ui, sans-serif;
+}
+
+.fielder {
+  cursor: grab;
+}
+
+.fielder circle {
+  fill: #f4d03f;
+  stroke: #ffffff;
+  stroke-width: 0.008;
+  transition: r 0.1s ease;
+}
+
+.fielder text {
+  font-size: 0.05px;
+  fill: #ffffff;
+  font-family: system-ui, sans-serif;
+  pointer-events: none;
+  paint-order: stroke fill;
+  stroke: rgba(0, 0, 0, 0.7);
+  stroke-width: 0.012;
+  stroke-linejoin: round;
+}
+
+.fielder.dragging {
+  cursor: grabbing;
+}
+
+.fielder.dragging circle {
+  fill: #ffb030;
+  filter: brightness(1.2);
+}
+
+.field.locked .fielder {
+  cursor: default;
+}
+
+.captain-ghost circle {
+  fill: none;
+  stroke: #ff4d4d;
+  stroke-width: 0.008;
+  stroke-dasharray: 0.015 0.015;
+  opacity: 0.9;
+}
